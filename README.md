@@ -12,12 +12,10 @@
     cd StudentApp
     ```
 -install the composer
-
     ```bash
     composer install 
     ```
 -Build the compose
-
     ```bash
     docker-compose build
     ```
