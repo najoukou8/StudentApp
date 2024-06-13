@@ -17,10 +17,11 @@
     composer install 
     ```
 -Build the compose
+
     ```bash
     docker-compose build
     ```
-
+-compose up
     ```bash
     docker-compose up
     ```
