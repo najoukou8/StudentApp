@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} navbar {% endblock %}
+
+{% block body %}
+   {% if app.user %}
+        
+   
+<nav class="navbar navbar-light bg-light">
+  
+  
+  <div class="user">
+ <a href="{{path('app_student')}}"> <i class="bi bi-house-fill"></i> </a>
+   {{ app.user.username }}
+  </div>
+  <div>
+   <a href="{{ path('fos_user_security_logout') }}">Logout</a>
+  </div>
+
+ </nav>
+  {% endif %}
+{% endblock %}

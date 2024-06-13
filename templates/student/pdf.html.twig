@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}pdf Student{% endblock %}
+
+{% block body %}
+ <h1>Information d'etudiant</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <td>{{ student.id }}</td>
+        </tr>
+        <tr>
+            <th>Nom</th>
+            <td>{{ student.nom }}</td>
+        </tr>
+        <tr>
+            <th>Prénom</th>
+            <td>{{ student.prenom }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ student.email }}</td>
+        </tr>
+        <tr>
+            <th>Teléphone</th>
+            <td>{{ student.tel }}</td>
+        </tr>
+    </table>
+{% endblock %}

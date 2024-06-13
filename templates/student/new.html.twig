@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Student{% endblock %}
+
+{% block body %}
+<style>
+.new-wrapper{
+     display: flex;
+    align-items: center;
+    flex-direction: column; 
+    justify-content: center;
+    width:auto ;
+    min-height: 100%;
+    margin: 20px;
+}
+</style>
+   {% include 'navbar.html.twig' %}
+<div class="new-wrapper">
+<h2> Ajout un nouveau etudiant </h2>
+</br>
+ {{ form_start(form) }}
+ {{ form_widget(form) }}
+ {{ form_end(form) }}
+ </div>
+{% endblock %}

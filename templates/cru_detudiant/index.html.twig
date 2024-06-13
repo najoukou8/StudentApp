@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Etudiant index{% endblock %}
+
+{% block body %}
+    <h1>Etudiant index</h1>
+
+    <table class="table table-striped table-bordered" id="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Email</th>
+                <th>Tel</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for etudiant in etudiants %}
+            <tr>
+                <td>{{ etudiant.id }}</td>
+                <td>{{ etudiant.nom }}</td>
+                <td>{{ etudiant.prenom }}</td>
+                <td>{{ etudiant.email }}</td>
+                <td>{{ etudiant.tel }}</td>
+                <td>
+                    <a href="{{ path('app_c_r_u_detudiant_show', {'id': etudiant.id}) }}">show</a>
+                    <a href="{{ path('app_c_r_u_detudiant_edit', {'id': etudiant.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_c_r_u_detudiant_new') }}">Create new</a>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }} 
+  <script>
+      
+    $(document).ready(function() {
+        $('#table').DataTable();
+    });
+</script>
+{% endblock %}

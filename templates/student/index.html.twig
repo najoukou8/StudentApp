@@ -1,0 +1,373 @@
+    {% extends 'base.html.twig' %}
+
+    {% block title %}Hello StudentController!{% endblock %}
+
+    {% macro sortArrow(sortName, sort, sortDirection) %}
+        {% if sort == sortName %}
+            {% if sortDirection == 'asc' %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-4 h-4" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 15l6 -6l6 6"></path>
+                </svg>
+            {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-4 h-4" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 9l6 6l6 -6"></path>
+                </svg>
+            {% endif %}
+        {% else %}
+            <!-- up and down arrow svg -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-4 h-4 text-slate-300" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M8 9l4 -4l4 4"></path>
+            <path d="M16 15l-4 4l-4 -4"></path>
+            </svg>
+        {% endif %}
+    {% endmacro %}
+
+    {% block body %}
+    <style>
+        .title{text-align: center;}
+        .example-wrapper { margin: 1em auto;  width: 80%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        .pagerfanta {
+                margin-top: 20px;
+                text-align: center;
+            }
+    .pagerfanta a, .pagerfanta span {
+        display: inline-block;
+        margin-right: 10px;
+        padding: 10px;
+    }
+    .search-wrapper{
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+    .actions{
+        display: flex;
+        gap: 2px;
+    }
+    .upload-form{
+        margin:10px;
+    }
+   .progress{
+    margin: 20px;
+    padding: 10px;
+    height: 20px;
+   }
+
+    </style>
+
+         {% include 'navbar.html.twig' %}
+
+    <div class="example-wrapper">
+
+    
+    <h1 class="title">Table des étudiants</h1> 
+
+
+        <div class="search-wrapper">
+            <form action="{{ path('app_student') }}" method="GET">
+                <div class="input-group mb-3">
+                    <input type="text" name="keyword" value="{{ keyword }}" class="form-control" placeholder="Rechercher..." aria-label="Rechercher par nom">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Rechercher</button>
+                    </div>
+                </div>
+                </form>
+        
+         {% if is_granted('ROLE_ADMIN') %}
+        <div class="button-wrapper">
+                <a href="{{ path('new_student') }}">
+                <button type="button" classe="add-button"  class="btn btn-outline-primary"> Ajouter </button>
+                </a>
+                <a href="" >
+                <button id="delete-button" type="button" classe="delete-button"  class="btn btn-outline-danger"  disabled> Effacer </button>
+                </a>
+                <button type="button" id="upload-button" data-toggle="modal" data-target="#upload-modal" class="btn btn-outline-info">Upload</button>
+        </div>
+         {% endif %}
+        </div>
+    
+    <div class="table-responsive">
+        <table id="students"  class="table table-striped table-hover "> 
+
+            <thead> 
+                <tr> 
+                    <th ><div class="form-check" ><input id="checkAll" class="form-check-input position-static" type="checkbox" >select </div> </th>
+                    <th><a href="{{ path('app_student', {'sort': 'id', 'sortDirection': sort == 'id' and sortDirection == 'ASC' }) }}">Id
+                    {{ _self.sortArrow('id', sort, sortDirection) }}</a> </th> 
+                    <th><a href="{{ path('app_student', {'sort': 'nom', 'sortDirection': sort == 'nom' and sortDirection == 'ASC' }) }}">nom
+                    {{ _self.sortArrow('nom', sort, sortDirection) }}</a> </th> 
+                    <th><a href="{{ path('app_student', {'sort': 'prenom', 'sortDirection': sort == 'prenom' and sortDirection == 'ASC' }) }}">Prénom
+                    {{ _self.sortArrow('prenom', sort, sortDirection) }}</a> </th> 
+                    <th><a href="{{ path('app_student', {'sort': 'email', 'sortDirection': sort == 'email' and sortDirection == 'ASC'}) }}">Email
+                    {{ _self.sortArrow('email', sort, sortDirection) }}</a> </th> 
+                    <th><a href="{{ path('app_student', {'sort': 'tel', 'sortDirection': sort == 'tel' and sortDirection == 'ASC' }) }}">Teléphone
+                    {{ _self.sortArrow('tel', sort, sortDirection) }}</a> </th> 
+                    <th> Action</th> 
+                </tr> 
+
+            </thead> 
+
+            <tbody> 
+
+                {% for student in students %} 
+
+                    <tr> 
+                        <td> <div class="form-check">
+                        <input class="form-check-input position-static row-checkbox" type="checkbox" name="studentIds[]" value="{{ student.id }}" {% if checkAll %}checked{% endif %}>
+
+                        </div></td>
+                        <td>{{ student.id }}</td> 
+                        <td>{{ student.nom }}</td> 
+                        <td>{{ student.prenom }}</td> 
+                        <td>{{ student.email }}</td> 
+                        <td>{{ student.tel }}</td> 
+                        <td class="actions">        
+                          {% if is_granted('ROLE_ADMIN') %}
+                        <a href="/studentapp/public/index.php/student/edit/{{student.id}}" class='btn btn-success'><i class='fa fa-edit'></i></a>        
+                        <a href=""  class="btn btn-danger delete-student" data-id="{{student.id}}"><i class="fas fa-trash-alt"></i> </a>
+                        {% endif %}
+                        <a href="{{ path('student_pdf', {'id': student.id}) }}"  class="btn btn-warning pdf-generator"><i class="fas fa-file-alt" style ='color:white'></i> </a>
+                
+                        </td>
+                    </tr> 
+
+                {% endfor %} 
+
+            </tbody> 
+
+        </table> 
+        </div>
+
+
+    <div class="pagerfanta">
+        {{ pagerfanta(pager) }}
+    </div>
+    </div>
+
+    <div class="modal fade" id="upload-modal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter un ficher</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {# <div class="modal-body">
+             <p>Glissez et déposez un fichier CSV ici ou cliquez pour le sélectionner.</p>
+                <div class="drop-zone" id="drop-zone">
+                    <div class="file">
+                        <input type="file" accept=".csv" class="file-input" id="inputFile" >
+                    </div>
+                    
+                </div>
+                <div id="csv-data" style="display: none;">
+                        <h5>Données du fichier CSV :</h5>
+                        <pre id="csv-content"></pre>
+                </div>
+
+            </div> #}
+
+            <form class="upload-form" action="{{ path('uploads_file') }}" method="post" enctype="multipart/form-data">
+              <p>  Glissez et déposez un fichier CSV ici ou cliquez pour le sélectionner. </p> 
+                <input type="file" name="fileToUpload[]" id="fileToUpload"  multiple>
+                </br>
+                    <div class="progress"></div>
+                    <div class="result"></div>
+
+            <div class="modal-footer">
+                <button id="annuler-btn" type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <input type="submit" id= "add-btn" value="Sauvgarder" name="submit" class="btn btn-primary submit">
+                </form>
+            </div>
+            </div>
+        </div>
+    </div> 
+
+
+    {% endblock %}
+    {% block javascripts %}
+    {{ parent() }} 
+        <script>
+            
+            document.addEventListener('DOMContentLoaded', event => {
+                const checkAll = document.getElementById('checkAll');
+                const checkboxes = document.querySelectorAll('.row-checkbox');
+                const deleteButton = document.getElementById('delete-button');
+                const students = document.getElementById('students');
+                const dropZone = document.getElementById('drop-zone');
+                const inputFile = document.getElementById('inputFile');
+                const csvContent = document.getElementById('csv-content');
+                const annulerButton = document.getElementById('annuler-btn');
+                const addButton = document.getElementById('add-btn');
+
+                const uploadForm = document.querySelector('.upload-form');
+                 
+                students.addEventListener('click', e => {
+                        if (e.target.classList.contains("delete-student")) {
+                            
+                            if (confirm("Confirmer vous la suppression?")) {
+                                const id = e.target.getAttribute('data-id');
+                                fetch(`student/delete/${id}`, { 
+                                    method: "DELETE"
+                                }).then(response => {
+                                    if (response.ok) {
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                
+                 
+                deleteButton.addEventListener('click', e=> {
+                        const checkedboxes = document.querySelectorAll('.row-checkbox:checked');
+                        if(confirm("Confirmer vous la suppression?")){
+                    
+                        checkedboxes.forEach((checkbox)=>{
+                            const id= checkbox.value;
+                            fetch(`student/delete/${id}`, { 
+                                    method: "DELETE"
+                                }).then(response => {
+                                    if (response.ok) {
+                                        window.location.reload();
+                                    }
+                                });
+                                })     
+                        }
+                    });
+                        
+               
+                annulerButton.addEventListener('click', e=> {
+                    inputFile.value='';
+                    csvContent.textContent='';
+                    document.getElementById('csv-data').style.display = 'none';
+                    });
+                        
+                
+            //addButton.addEventListener('click', e=> {
+                //         const csvData= csvContent.textContent;
+                //         if(csvData){
+                //             const rows = csvData.split('\n');
+                //             rows.forEach(row=>{
+                //                 const columns = row.split(';');
+                //                 const [id, nom] = columns.map(column => column ? column.trim() : '');
+                //                 const formData = new FormData();
+                //                 formData.append('Id', id);
+                //                 formData.append('Nom', nom);
+                               
+                //                 fetch(`{{ path('new_student') }}`, {
+                //                     method: 'POST',
+                //                     body: formData
+                //                     }).then(response => {
+                //                         if (response.ok) {
+                //                          window.location.reload();                               
+                //                             }
+                //                     });
+                               
+                //                  });
+                //         }
+                //         });
+                    
+                
+                function enableBtn() {
+                    deleteButton.disabled = false;
+                }
+                
+                function disenableBtn() {
+                    deleteButton.disabled = true;
+                }
+
+                checkboxes.forEach((checkbox) => {
+                    checkbox.addEventListener('change', (event) => {
+                        const atLeastOneChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
+                        if (atLeastOneChecked) {
+                            enableBtn();
+                        } else {
+                            disenableBtn();
+                        }
+                    });
+                });
+
+                
+                checkAll.addEventListener('change', e => {
+                    const checked = e.target.checked;
+                    checkboxes.forEach((checkbox) => {
+                        checkbox.checked = checked;
+                    });
+                    if (checked) {
+                        enableBtn();
+                    } else {
+                        disenableBtn();
+                    }
+                });
+            
+                // inputFile.addEventListener('change', e=>{
+                //     const file = e.target.files[0];
+                //     const reader = new FileReader();
+                //     reader.onload = function(e) {
+                //     csvContent.textContent = e.target.result;
+                //     document.getElementById('csv-data').style.display = 'block';
+                //      };
+
+                //     reader.readAsText(file);
+                //         })
+                // dropZone.addEventListener('dragover', e=>{
+                //     e.preventDefault();
+                //     dropZone.classList.add('dragover');
+                // });
+                // dropZone.addEventListener('dragleave', e=>{
+                //     e.preventDefault();
+                //     dropZone.classList.remove('dragover');
+                // });
+                //  dropZone.addEventListener('drop', e=>{
+                //     e.preventDefault();
+                //     dropZone.classList.remove('dragover');
+                //     const file = e.dataTransfer.files[0];
+                //     const reader = new FileReader();
+
+                //     reader.onload = function(e) {
+                //         csvContent.textContent = e.target.result;
+                //         document.getElementById('csv-data').style.display = 'block';
+                //     };
+
+                //     reader.readAsText(file);
+                // });
+
+
+               uploadForm.onsubmit = event => {
+                event.preventDefault();
+                let uploadFormDate = new FormData(uploadForm);
+                let request = new XMLHttpRequest();
+                request.open('POST', uploadForm.action);
+                request.upload.addEventListener('progress', event => {
+
+                uploadForm.querySelector('.progress').innerHTML = 'Téléchargement... ' + '(' + ((event.loaded/event.total)*100).toFixed(2) + '%)';
+                uploadForm.querySelector('.progress').style.background = 'linear-gradient(to right, #25b350, #25b350 ' + Math.round((event.loaded/event.total)*100) + '%, #e6e8ec ' + Math.round((event.loaded/event.total)*100) + '%)';
+                    
+                });
+                request.onreadystatechange = () => {
+                    if (request.readyState == 4 && request.status == 200) {
+                        uploadForm.querySelector('.result').innerHTML = request.responseText;
+                    }
+                    window.location.reload();
+                };
+                request.send(uploadFormDate);
+            };
+        
+            });
+
+     
+   
+            
+        </script>
+    {% endblock %}
+
+
+

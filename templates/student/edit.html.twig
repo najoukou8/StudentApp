@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}edit Student{% endblock %}
+
+{% block body %}
+   {% include 'navbar.html.twig' %}
+ {{ form_start(form) }}
+ {{ form_widget(form) }}
+ {{ form_end(form) }}
+{% endblock %}
