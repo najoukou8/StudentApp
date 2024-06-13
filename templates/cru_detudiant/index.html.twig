@@ -3,8 +3,19 @@
 {% block title %}Etudiant index{% endblock %}
 
 {% block body %}
-    <h1>Etudiant index</h1>
+<style>
+.content-wrapper{
+    margin: 1em auto;  
+    width: 80%; 
+    font: 18px/1.5 sans-serif;
+    text-align: center;
+}
+</style>
 
+  {% include 'navbar.html.twig' %}
+  <div class= "content-wrapper">
+    <h1>Table des étudiants</h1>
+ <a href="{{ path('app_c_r_u_detudiant_new') }}">Create new</a>
     <table class="table table-striped table-bordered" id="table">
         <thead>
             <tr>
@@ -37,7 +48,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_c_r_u_detudiant_new') }}">Create new</a>
+   
 {% endblock %}
 
 {% block javascripts %}
