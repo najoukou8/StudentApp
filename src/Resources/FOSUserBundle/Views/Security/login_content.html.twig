@@ -2,7 +2,7 @@
 
 
 
-    <style>
+<style>
     
     .login-wrapper{
         display: flex;
@@ -36,31 +36,30 @@
         text-align: center;
     }
  
-   input[type=submit]  {
-  background-color: #56baed;
-  border: none;
-  color: white;
-  padding: 15px 80px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  text-transform: uppercase;
-  font-size: 13px;
-  -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
-  box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
-  -webkit-border-radius: 5px;
-  border-radius: 5px ;
-  margin: 20px 20px 40px 20px;
-  
-}
+    input[type=submit]  {
+      background-color: #56baed;
+      border: none;
+      color: white;
+      padding: 15px 80px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      text-transform: uppercase;
+      font-size: 13px;
+      -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+      box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+      -webkit-border-radius: 5px;
+      border-radius: 5px ;
+      margin: 20px 20px 40px 20px;
+      }
 
-input[type=submit]:hover  {
+    input[type=submit]:hover  {
   background-color: #39ace7;
-}
+    }
 
 
 
-input[type=text ],input[type=password] {
+    input[type=text ],input[type=password] {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -73,40 +72,36 @@ input[type=text ],input[type=password] {
   width: 85%;
   border: 2px solid #f6f6f6;
 
-}
+    }
 
 
-input:placeholder {
+    input:placeholder {
   color: #cccccc;
-}
+    } 
 
-/* ANIMATIONS */
+    .fadeInDown {
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    }
 
-/* Simple CSS3 Fade-in-down Animation */
-.fadeInDown {
-  -webkit-animation-name: fadeInDown;
-  animation-name: fadeInDown;
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
+    @-webkit-keyframes fadeInDown {
+      0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+      }
+      100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+     }
 
-@-webkit-keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-
-    </style>
+</style>
 
     <div class="login-wrapper fadeInDown">
    
@@ -119,14 +114,8 @@ input:placeholder {
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
         {% endif %}
 
-      
-        <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" required="required" autocomplete="username" placeholder="Username" />
-
-        
+        <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" required="required" autocomplete="username" placeholder="Username" />      
         <input type="password" id="password" name="_password" required="required" class="form-control" autocomplete="current-password" placeholder="Password" />
-    
-      
-
         <input type="submit" id="_submit" name="_submit" class="btn btn-lg btn-primary submit-btn" value="{{ 'security.login.submit'|trans }}" />
     </form>
 
