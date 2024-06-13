@@ -3,6 +3,7 @@
 #Instructions to deploy the project using docker
 #prerequires 
 - docker installed
+- composer installed
 
 
 ### Steps
@@ -11,10 +12,7 @@
     git clone https://github.com/najoukou8/StudentApp.git
     cd StudentApp
     ```
-- install the composer
-    ```bash
-    composer install 
-    ```
+
 - Build the compose
     ```bash
     docker-compose build
