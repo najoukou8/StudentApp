@@ -6,16 +6,17 @@
 
 
 ### Steps
-
+- clone the project
     ```bash
     git clone https://github.com/najoukou8/StudentApp.git
     cd StudentApp
     ```
+-install the composer
 
     ```bash
     composer install 
     ```
-
+-Build the compose
     ```bash
     docker-compose build
     ```
