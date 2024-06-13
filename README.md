@@ -27,10 +27,3 @@
 - Access the Application
    - Open a web browser and navigate to `http://localhost`.
 
-## Environment Variables
-
-- Set any required environment variables in the `.env` file.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
