@@ -9,7 +9,7 @@
 - clone the Repository:
     ```bash
     git clone https://github.com/najoukou8/StudentApp.git
-    cd your-project-repo
+    cd StudentApp
     ```
 
 
