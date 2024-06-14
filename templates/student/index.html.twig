@@ -345,6 +345,7 @@
                 event.preventDefault();
                 let uploadFormDate = new FormData(uploadForm);
                 let request = new XMLHttpRequest();
+                
                 request.open('POST', uploadForm.action);
                 request.upload.addEventListener('progress', event => {
 
@@ -364,8 +365,6 @@
             });
 
      
-   
-            
         </script>
     {% endblock %}
 

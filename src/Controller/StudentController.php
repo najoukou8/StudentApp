@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use App\Entity\Etudiant;
+use App\Entity\UploadedFiles;
 use App\Service\PdfGeneratorService;
 use App\Service\UploadService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -35,13 +36,22 @@ class StudentController extends AbstractController
 
      */
 
-    public function upload( Request $request, UploadService $uploadService){
+    public function upload( Request $request, UploadService $uploadService, EntityManagerInterface $entityManager ){
       $target_dir = $this->getParameter('kernel.project_dir') . '/public/uploads/';
-      echo($target_dir);
       $files= $request->files->get("fileToUpload");
+
       foreach($files as $file){
-       $fileContent= $uploadService->uploadFile($file,$target_dir );
+       $filecontent= $uploadService->uploadFile($file,$target_dir );
+       $fileUploaded= new UploadedFiles();
+    
+       $fileUploaded->setFileName($filecontent['filename']);
+       $fileUploaded->setFilepath($filecontent['filepath']);
+       $fileUploaded->setSize($filecontent['size']);
+        
+       $entityManager->persist($fileUploaded);
       }
+
+      $entityManager->flush();
       return new Response('');
 
     }

@@ -30,7 +30,7 @@ task('deploy', function () {
 
 // Hosts
 
-host('project.com')
+host('testHostdepd')
     ->set('deploy_path', '~/{{application}}')
     ->port(25560);
      

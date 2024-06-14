@@ -18,7 +18,9 @@ class UploadService
         $uploadOk = 1;
         $fileName= md5(uniqid()) . '.' . $file->guessExtension();
         $target_file = $target_dir . $fileName;
-    
+        $fileSize = $file->getSize();
+        
+        
         if($file) {
           $check = $file->getClientMimeType(); 
               if ($check === 'text/csv' || $check === 'application/pdf' || $check === 'application/msword' || $check ==='text/plain' | $check ==='application/vnd.openxmlformats-officedocument.wordprocessingml.document' ) {
@@ -41,6 +43,14 @@ class UploadService
             echo "Une erreur s'est produite lors du téléchargement de votre fichier.\n";
           }
         }
+        return [
+          'filename' => $fileName,
+          'size' => $fileSize,
+          'filepath' => $target_file,
+      ];
       }
+     
+
+   
               
     }
