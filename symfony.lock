@@ -280,5 +280,8 @@
     },
     "twig/extra-bundle": {
         "version": "v3.3.4"
+    },
+    "white-october/pagerfanta-bundle": {
+        "version": "v1.3.2"
     }
 }

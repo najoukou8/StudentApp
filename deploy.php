@@ -15,7 +15,7 @@ set('repository', 'https://github.com/najoukou8/StudentApp.git');
 set('git_tty', true); 
 
 // Shared files/dirs between deploys 
-add('shared_files', ['.env']);
+add('shared_files', []);
 add('shared_dirs', []);
 
 // Writable dirs by web server 
@@ -31,8 +31,9 @@ task('deploy', function () {
 // Hosts
 
 host('project.com')
-    ->set('deploy_path', '~/{{application}}');    
-    
+    ->set('deploy_path', '~/{{application}}')
+    ->port(25560);
+     
 // Tasks
 
 task('build', function () {
